@@ -51,7 +51,8 @@
 
     ===================== */
 
-    var data = bikeArrayClean;
+    //var data = bikeArrayClean;
+    var data = bikeArrayDirty;
 
     /* =====================
 
@@ -59,7 +60,16 @@
 
     ===================== */
 
-
+    // A function to filter values & clean data
+    var dataFiltered = [];
+    var filterAndClean = function(data,number){
+      for (var i = 0; i < data.length; i++){
+        if (parseInt(data[i][3]) > number){
+          dataFiltered.push(data[i]);
+        };
+      };
+      return dataFiltered;
+    };
 
     /* =====================
 
@@ -86,13 +96,42 @@
 
     ===================== */
 
+    // for (var j = 0; j < dataFiltered.length; j++){
+    //   L.marker([dataFiltered[j][1],dataFiltered[j][0]]).addTo(map).bindPopup(dataFiltered[j][2]);
+    // };
 
+    // A function to create leaflet objects from 'clean' data
+    var objectList = [];
+    var createLeafletObject = function(data){
+      for (var i = 0; i < data.length; i++){
+        objectList.push([data[i][1],data[i][0], data[i][2]]);
+      };
+      return objectList;
+    };
+
+    // A function to place those objects on the map
+    var mapObject = function(mapObject){
+      for (var i = 0; i < mapObject.length; i++){
+        L.marker([mapObject[i][0],mapObject[i][1]]).addTo(map).bindPopup(mapObject[i][2]);
+      };
+    };
+
+    // Chain all functions together
+    var chainFunction = function(data,num){
+      dataFiltered = filterAndClean(data,num);
+      objectList = createLeafletObject(dataFiltered);
+      mapObject(objectList);
+    }
+
+    // Call the final chainFunction
+    chainFunction(data,20);
 
     /* =====================
 
     End code to add markers to map
 
     ===================== */
+
 
     </script>
   </body>
